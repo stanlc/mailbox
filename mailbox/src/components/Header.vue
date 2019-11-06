@@ -7,14 +7,15 @@
           <div class="right clearfix">
             <div class="user">
                 <div class="vip float">
-                  vip
+                  vip<span>|</span>
                 </div>
                 <div class="float">
                   <el-avatar :size="20" icon="el-icon-user-solid"></el-avatar>
                 </div>
                 <div class="float">{{phone}}</div>
+                <div class="float">more<span>|</span></div>
                 <div class="checkout float">
-                  退出
+                  <span>=></span>退出
                 </div>
             </div>
           </div>
@@ -40,10 +41,10 @@ export default {
     height: 0;
     clear: both;
   }
-
+  
   .headContainer{
       width: 100%;
-      height: 35px;
+      height: 60px;
       background-color: #052746;
       color: #fff;
       text-align: center;
@@ -52,21 +53,28 @@ export default {
         height: 100%;
         display: flex;
         align-items: center;
-        margin-right: 5px;
+        margin-right: 20px;
         .user div{
-          margin-right:10px;
+          margin:0 10px 0 0;
+          span{
+            margin:0 0 0 10px;
+          }
+          .checkout{
+            margin:0 10px 0 0;
+          }
         }
       }
       .left{
           float: left;
           height: 100%;
-          color:#06dfe3;
+          font-size: 30px;
+          color:#00ffdd;
           font-weight:bold;
           display: flex;
           align-items: center;
           .logo{
             width: 145px;
-            height: 15px;
+            height: 30px;
             background:#06dfe3;
             margin:0 10px 0 20px;
           }
