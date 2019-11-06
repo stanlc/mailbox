@@ -17,6 +17,11 @@ const routes = [
     component: System
   },
   {
+    path: '/bind',
+    name: 'bind',
+    component: Bind
+  },
+  {
     path: '/obersve',
     name: 'about',
     // route level code-splitting
