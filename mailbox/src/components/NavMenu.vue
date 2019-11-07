@@ -1,7 +1,6 @@
 <template>
     <div class = "nav-head">
         <el-menu 
-          :default-active="activeIndex" 
           class="el-menu-demo" 
           mode="horizontal" 
           background-color = "#1c4072"
@@ -21,7 +20,7 @@
 export default {
   data(){
     return{
-      activeIndex:'/info'
+
     }
   }
 }

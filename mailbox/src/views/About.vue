@@ -28,6 +28,10 @@
       stripe
       >
         <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
         prop="number"
         label="序号"
         sortable
@@ -75,12 +79,16 @@
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" >
+ 
   .el-table__row {                       
      background-color: #0e1d30 !important;       //修改el-table奇数行颜色
-}
+     border: none;
+     outline:none;
+  }
   .el-table .cell{
     text-align: center;
+    border: none;
     //color: #fff;
   }
 </style>

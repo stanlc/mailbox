@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import System from '../views/System'
+import Bind from '../views/Bind'
+import Equipment from '../views/Equipment'
+import ComprehensiveInfo from '../views/ComprehensiveInfo'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/info',
-    name: 'home',
-    component: Home
+    name: 'ComprehensiveInfo',
+    component: ComprehensiveInfo,
   },
   {
     path: '/system',
@@ -20,6 +22,11 @@ const routes = [
     path: '/bind',
     name: 'bind',
     component: Bind
+  },
+  {
+    path: '/equipment',
+    name: 'equipment',
+    component: Equipment
   },
   {
     path: '/obersve',
