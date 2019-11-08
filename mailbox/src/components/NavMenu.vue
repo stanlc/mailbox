@@ -28,9 +28,11 @@ export default {
 <style scoped lang="scss">
   .nav-head{
     opacity: 0.8;
-    .el-menu-demo .el-menu--horizontal{
+    .el-menu.el-menu--horizontal {
       border-bottom: none;
-      
+    }
+    .el-menu--horizontal>.el-menu-item{
+      border:none;            //去除导航单个选项边框
     }
   }
   .el-menu-demo .el-menu-item{
@@ -47,7 +49,7 @@ export default {
     color:#fff !important;
   }
   .el-menu-item.is-active {
-    outline: 0 !important;
+    border: 0 !important;
     color: #fff !important;
     background-color: #22bdd8 !important;
   }

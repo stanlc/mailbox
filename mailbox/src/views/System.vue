@@ -26,12 +26,11 @@
                         <el-button type="danger"  size="small">删除</el-button>
                         <el-button type="primary" size="small">权限配置</el-button>
                     </div>
-                    <div class="table-box">
+                    <div class="myTableStyle">
                        <el-table
                         :data="tableData"
                         style="width: 100%"
-                        :row-style="tableRowStyle"
-                        :header-cell-style="headerRowStyle"
+                        :row-class-name="rowStyle"
                         >
                         <el-table-column
                         type="selection"
@@ -89,26 +88,27 @@ export default {
                     name:'aa',
                     roledec:'admin',
                     inittime:'2019-10-25'
+                },
+                 {
+                    number:'1',
+                    name:'aa',
+                    roledec:'admin',
+                    inittime:'2019-10-25'
                 }
-            ]
+            ],
+            rowStyle:'rowStyle',
         }
     },
     methods:{
-        // 修改table row的背景色
-        headerRowStyle(){
-            return 'background-color: transparent;color: #02d6da;font-weigth:none'
-        },
-        tableRowStyle() {
-        return 'background-color: pink'
-        },
+        
     }
 }
 </script>
 <style lang="scss" scoped>
 
-.el-table .cell{
-     background-color: transparent;
-}
+// .el-table .cell{
+//      background-color: transparent;
+// }
 .container{
     display: flex;
     justify-content: center;
@@ -123,7 +123,8 @@ export default {
             border-radius: 5px 5px 0 0;
         }
         width:40vw;
-        height:30vw;
+        height:38vh;
+        overflow: hidden;
         background-color: #113;
         color: #fff;
         opacity: 0.8;
