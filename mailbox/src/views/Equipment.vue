@@ -5,7 +5,7 @@
            <div class="search-box">
                <el-form  v-model="form" :inline="true" size="mini" >
                     <el-form-item label="设备类型:">
-                        <el-input v-model="form.type"></el-input>
+                        <el-input v-model="form.type" class="aa"></el-input>
                     </el-form-item>
                     <el-form-item label="设备名称:">
                         <el-input v-model="form.name"></el-input>
@@ -22,7 +22,7 @@
                 </el-form>
                 <el-form  v-model="form" :inline="true" size="mini" >
                     <el-form-item label="订阅账号:">
-                        <el-input v-model="form.account"></el-input>
+                        <el-input v-model="form.account" class="dialog-input-text"></el-input>
                     </el-form-item>
                     <el-form-item label="所属机构:">
                          <el-select v-model="form.mechanism" >
@@ -126,7 +126,7 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
     .el-container {
         width:96vw;
         height:40vw;
@@ -136,5 +136,11 @@ export default {
         border-radius: 5px;
         margin: 2vw auto;
     }
-   
+    .el-input,.el-select{
+        width:200px;
+    }
+    
+    
+    
+    
 </style>

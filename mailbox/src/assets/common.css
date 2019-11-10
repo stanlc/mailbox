@@ -1,0 +1,9 @@
+.el-input--mini /deep/ .el-input__inner {
+    background-color: transparent;
+ }
+.el-select /deep/ .el-input__inner {
+    background-color: transparent;
+ }
+
+
+ 

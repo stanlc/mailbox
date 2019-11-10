@@ -19,7 +19,7 @@
             :data="listData"
             style="width: 100%"
             :default-sort = "{prop: 'date', order: 'descending'}"
-            :row-class-name="rowStyle"
+            :row-style="rowStyle"
             >
               <el-table-column
                 type="selection"
@@ -75,7 +75,7 @@
   
 </template>
 
-<style lang="scss" >
+<style scope>
   .el-container {
         width:96vw;
         height:40vw;
@@ -85,6 +85,7 @@
         border-radius: 5px;
         margin: 2vw auto;
     }
+    
 </style>
 <script>
   export default {
@@ -157,16 +158,17 @@
         selectvalue:'',
         namevalue:'',
         listData:[],
-        rowStyle:'rowStyle',
       }
     },
     mounted(){
       this.listData = this.tableData
     },
     methods: {
-      // datefilter(val,...type){
-      //   this.listData = this.tableData.filter(item =>(~item[type[0]].indexOf(val)));   //筛选列表项
-      // },
-    },
+      rowStyle(rowIndex){
+        if(rowIndex==1){
+          return 'background:blue'
+        }
+      }
+    }
   }
 </script>

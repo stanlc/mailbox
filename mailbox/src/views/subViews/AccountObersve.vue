@@ -103,7 +103,6 @@ export default {
         }
         width:75vw;
         height: 80vh;
-        background-color: rgba($color: #aaa, $alpha: 0.8);
         color: #fff;
         border-radius: 5px;
     }
