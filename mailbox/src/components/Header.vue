@@ -12,11 +12,9 @@
                 <div class="float">
                   <el-avatar :size="20" icon="el-icon-user-solid"></el-avatar>
                 </div>
-                <div class="float">{{phone}}</div>
-                <div class="float">more<span>|</span></div>
-                <div class="checkout float">
-                  <span>=></span>退出
-                </div>
+                <div class="float">{{nickName}}</div>
+                <div class="el-icon-more"><span>|</span></div>
+                <a href="javascript:;" class="el-icon-d-arrow-right" @click="checkout">退出</a>
             </div>
           </div>
     </div>
@@ -26,7 +24,18 @@
 export default {
    data(){
     return{
-      phone:'12435436'
+      userInfo:JSON.parse(localStorage.getItem('userInfo')),
+      nickName:'',
+    }
+  },
+  mounted(){
+    this.nickName=this.userInfo.nickName
+  },
+  methods:{
+    checkout(){
+      
+      localStorage.clear();
+      this.$router.push('/login');
     }
   },
 }
@@ -41,7 +50,10 @@ export default {
     height: 0;
     clear: both;
   }
-  
+  a{
+    color: #fff;
+    text-decoration: none;
+  }
   .headContainer{
       width: 100%;
       height: 60px;

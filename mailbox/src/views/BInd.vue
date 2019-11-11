@@ -9,11 +9,11 @@
                 router
                 active-text-color="#fff"
                 >
-                <el-menu-item index="/bind">
+                <el-menu-item index="/bind/AccountObersve">
                     <i class="el-icon-collection-tag"></i><span slot="title">账号订阅</span>
                 </el-menu-item>
                 <el-menu-item index="/bind/EquBind"><i class="el-icon-link"></i>设备绑定</el-menu-item>
-            </el-menu>
+                </el-menu>
             </el-aside>
             <el-main>
                 <router-view></router-view>

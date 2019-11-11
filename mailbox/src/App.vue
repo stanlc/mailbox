@@ -34,7 +34,7 @@ html,body{
   height: 30px !important;
   line-height: 30px;
   color: #fff;
-  background-color:#555; 
+  background-color:#18427d !important; 
   border-radius: 5px 5px 0 0;
 }
 

@@ -1,150 +1,49 @@
 <template>
-    <div class="container">
-        <div class="left">
-            <el-container>
-                <el-header>机构管理</el-header>
-                <el-main>
-                    <div class="btn-box">
-                        <el-button type="primary" size="small"><span>录入同级</span></el-button>
-                        <el-button type="primary" size="small">录入下级</el-button>
-                        <el-button type="primary" size="small">编辑</el-button>
-                        <el-button type="danger"  size="small">删除</el-button>
-                    </div>
-                    <div class="info-box">
-                        <el-tree :data="data" :props="defaultProps" default-expand-all></el-tree>
-                    </div>
-                </el-main>
-            </el-container>
-        </div>
-        <div class="right">
-            <el-container>
-                <el-header>角色管理</el-header>
-                <el-main>
-                    <div class="btn-box">
-                        <el-button type="primary" size="small"><span>录入</span></el-button>
-                        <el-button type="primary" size="small">编辑</el-button>
-                        <el-button type="danger"  size="small">删除</el-button>
-                        <el-button type="primary" size="small">权限配置</el-button>
-                    </div>
-                    <div class="myTableStyle">
-                       <el-table
-                        :data="tableData"
-                        style="width: 100%"
-                        :row-class-name="rowStyle"
-                        >
-                        <el-table-column
-                        type="selection"
-                        width="55">
-                        </el-table-column>
-                        <el-table-column
-                        label="序号"
-                        prop="number"
-                        width="120">
-                        </el-table-column>
-                        <el-table-column
-                        prop="name"
-                        label="用户名称"
-                        width="120">
-                        </el-table-column>
-                        <el-table-column
-                        prop="roledec"
-                        label="角色描述">
-                        </el-table-column>
-                        <el-table-column
-                        prop="inittime"
-                        label="创建时间"
-                        width="120"
-                        ></el-table-column>
-                    </el-table>
-                    </div>
-                </el-main>
-            </el-container>
-        </div>
-    </div>
+        <el-container>
+            <el-aside>
+                <el-menu 
+                class="el-menu-demo" 
+                background-color = "#112e57"
+                text-color="#fff"
+                default-active="/system/mechanism"
+                router
+                active-text-color="#fff"
+                >
+                <el-menu-item index="/system/mechanism">
+                    <i class="el-icon-office-building"></i><span slot="title">组织机构</span>
+                </el-menu-item>
+                <el-menu-item index="/system/users"><i class="el-icon-s-custom"></i>用户管理</el-menu-item>
+                </el-menu>
+            </el-aside>
+            <el-main>
+                <router-view></router-view>
+            </el-main>
+        </el-container>
 </template>
 
-<script>
-export default {
-    data(){
-        return {
-            data:[{
-                label: '花园小区',
-                children: [{
-                    label: '花园小区1',
-                },
-                {
-                    label:'花园小区2'
-                }
-                ]
-            }
-            ],
-            defaultProps: {
-                children: 'children',
-                label: 'label'
-            },
-            tableData:[
-                {
-                    number:'1',
-                    name:'aa',
-                    roledec:'admin',
-                    inittime:'2019-10-25'
-                },
-                 {
-                    number:'1',
-                    name:'aa',
-                    roledec:'admin',
-                    inittime:'2019-10-25'
-                }
-            ],
-            rowStyle:'rowStyle',
-        }
-    },
-    methods:{
-        
-    }
-}
-</script>
 <style lang="scss" scoped>
-
-// .el-table .cell{
-//      background-color: transparent;
-// }
-.container{
-    display: flex;
-    justify-content: center;
-    .right,.left{
-        margin: 2vw 1vw 0 1vw;
-    }
+    
     .el-container {
-        .el-header{
-            height: 30px !important;
-            line-height: 30px;
-            background-color:#555; 
-            border-radius: 5px 5px 0 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        .el-aside{
+            width: 280px !important;
+            height: 100vh;
+            background-color: #112e57;
+            .el-menu{
+                border: none;
+                text-align: center;
+                .el-menu-item:hover{
+                    background-color:#196de5 !important;
+                }
+                .el-menu-item.is-active {       //el-menu激活后样式
+                    outline: 0 !important;
+                    color: #fff !important;
+                    background-color: #196de5 !important;
+                }
+            }
+            
         }
-        width:40vw;
-        height:38vh;
-        overflow: hidden;
-        background-color: #113;
-        color: #fff;
-        opacity: 0.8;
-        border-radius: 5px;
-       
     }
-}
-
-.el-tree{
-    background-color: transparent;
-    .el-tree-node__content{
-        background-color: transparent;
-    }
-    :hover{
-        background-color: transparent;
-    }
-
-}
-// .el-tree-node:focus > .el-tree-node__content {
-//   background-color: #222 !important;
-// }
-
 </style>

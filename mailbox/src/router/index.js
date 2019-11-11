@@ -8,6 +8,8 @@ import Log from '../views/Log'
 import ComprehensiveInfo from '../views/ComprehensiveInfo'
 import AccountObersve from '../views/subViews/AccountObersve'
 import EquBind from '../views/subViews/EquBind'
+import Users from '../views/subViews/Users'
+import mechanism from '../views/subViews/mechanism'
 import login from '../views/login'
 import Home from '../views/Home'
 
@@ -23,6 +25,7 @@ const routes = [
     path:'/home',
     name:'Home',
     component:Home,
+    redirect:'/info',
     children:[
       {
         path: '/info',
@@ -32,7 +35,20 @@ const routes = [
       {
         path: '/system',
         name: 'system',
-        component: System
+        component: System,
+        children:[
+          {
+            path:'mechanism',
+            name:'mechanism',
+            component:mechanism
+          },
+          {
+            path:'users',
+            name:'Users',
+            component:Users
+          }
+        ],
+        redirect:'/system/mechanism'
       },
       {
         path: '/bind',
@@ -40,7 +56,7 @@ const routes = [
         component: Bind,
         children:[
           {
-            path:'/',
+            path:'AccountObersve',
             name:'AccountObersve',
             component:AccountObersve
           },
@@ -50,8 +66,9 @@ const routes = [
             component:EquBind
           }
         
-          ]
-          },
+          ],
+        redirect:'/bind/AccountObersve'
+      },
         {
           path: '/equipment',
           name: 'equipment',
@@ -82,22 +99,19 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  //用你的方式获取登录的用户信息
-  const userinfo = localStorage.userinfo
-  if(userInfo || to.name === 'Login'){
-      //如果存在用户信息，或者进入的页面是登录页面，则直接进入
+  const token = localStorage.getItem('token')
+  if(token || to.name === 'login'){
       next()
   }else {
-      //不存在用户信息则说明用户未登录，跳转到登录页面，带上当前的页面地址，登录完成后做回跳，
-      //如未登录用户进入用户中心的页面地址，检测到未登录，
-      //自动跳转到登录页面，并且带上用户中心的页面地址，登录完成后重新跳到个人中心页面。
       next({
-        name: 'Login',
+        name: 'login',
         query: {
           redirect: to.path
         }
       })
   }
 })
+
+
 
 export default router
