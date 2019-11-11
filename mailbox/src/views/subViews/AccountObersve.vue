@@ -101,7 +101,7 @@ export default {
             background-color:#555; 
             border-radius: 5px 5px 0 0;
         }
-        width:75vw;
+        width:77vw;
         height: 80vh;
         color: #fff;
         border-radius: 5px;

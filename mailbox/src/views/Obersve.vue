@@ -4,10 +4,10 @@
     <el-main>
           <div class="home">
           <el-form :inline="true" v-model="form" size="mini">
-            <el-form-item label="小区名称:">
+            <el-form-item label="小区名称：">
               <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="楼栋">
+            <el-form-item label="楼栋：">
               <el-input v-model="form.buliding"></el-input>
             </el-form-item>
             <el-form-item>

@@ -28,7 +28,7 @@
         width: 100%;
         height: 100%;
         .el-aside{
-            width: 15%;
+            width: 280px !important;
             height: 100vh;
             background-color: #112e57;
             .el-menu{

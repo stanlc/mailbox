@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-      <Header></Header>
-      <nav-menu></nav-menu>
       <div class="viewbox">
         <router-view></router-view>
       </div>
@@ -9,15 +7,9 @@
 </template>
 
 <script>
-
-import Header from './components/Header'
-import NavMenu from './components/NavMenu'
 export default {
   name: 'app',
-  components:{
-    Header,
-    NavMenu
-  },
+ 
   
 }
 </script>

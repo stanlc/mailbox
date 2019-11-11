@@ -4,13 +4,13 @@
         <el-main>
            <div class="search-box">
                <el-form  v-model="form" :inline="true" size="mini" >
-                    <el-form-item label="设备类型:">
+                    <el-form-item label="设备类型：">
                         <el-input v-model="form.type" class="aa"></el-input>
                     </el-form-item>
-                    <el-form-item label="设备名称:">
+                    <el-form-item label="设备名称：">
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="设备状态:">
+                    <el-form-item label="设备状态：">
                         <el-select v-model="form.state">
                             <el-option label="在线" value="在线"></el-option>
                             <el-option label="离线" value="离线"></el-option>
@@ -21,10 +21,10 @@
                     </el-form-item>
                 </el-form>
                 <el-form  v-model="form" :inline="true" size="mini" >
-                    <el-form-item label="订阅账号:">
+                    <el-form-item label="订阅账号：">
                         <el-input v-model="form.account" class="dialog-input-text"></el-input>
                     </el-form-item>
-                    <el-form-item label="所属机构:">
+                    <el-form-item label="所属机构：">
                          <el-select v-model="form.mechanism" >
                             <el-option label="花园小区1" value="花园小区1"></el-option>
                             <el-option label="花园小区2" value="花园小区2"></el-option>
@@ -139,7 +139,9 @@ export default {
     .el-input,.el-select{
         width:200px;
     }
-    
+    .el-form  .el-form-item{
+    padding:0 30px 0 0;
+    }
     
     
     
