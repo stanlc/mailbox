@@ -4,8 +4,7 @@
           class="el-menu-demo" 
           mode="horizontal" 
           background-color = "#1c4072"
-           default-active="/info"
-          de
+          default-active="/info"
           text-color="#fff"
           router
           >
