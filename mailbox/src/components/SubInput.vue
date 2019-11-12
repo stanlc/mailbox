@@ -59,14 +59,13 @@
 export default {
     data(){
         return{
-            form:{
-                "action": 2,                //1建平级，2建下级
+            form:{          
                 'organName':'',
                 'organDesc':'',
                 'phone':'',
                 'organPerson':'',
                 'organLatitude':'',
-                'organLongitude':''
+                'organLongitude':'',
             },
         }
     },

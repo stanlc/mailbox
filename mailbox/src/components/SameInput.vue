@@ -60,7 +60,7 @@ export default {
     data(){
         return{
             form:{
-                "action": 1,                //1建平级，2建下级
+                              //1建平级，2建下级
                 'organName':'',
                 'organDesc':'',
                 'phone':'',
@@ -75,7 +75,6 @@ export default {
     },
     methods:{
         hide(){
-            
             this.$emit('func',false);
         },
         addSubOrgan(){

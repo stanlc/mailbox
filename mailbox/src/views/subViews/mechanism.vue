@@ -9,7 +9,7 @@
                            <el-button type="primary"  @click="showSame">录入同级</el-button>
                            <el-button type="primary" @click="show">录入下级</el-button>
                            <el-button type="primary" @click="showEditOrgan">编辑</el-button>
-                           <el-button type="danger"  @click="delorgan(3)">删除</el-button>
+                           <el-button type="danger"  @click="delorgan(9)">删除</el-button>
                        </el-form-item>
                    </el-form>
                    <el-tree :data="organList" :props="defaultProps" @node-click="handleNodeClick" :highlight-current="false"></el-tree>
