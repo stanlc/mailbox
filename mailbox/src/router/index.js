@@ -29,15 +29,15 @@ const routes = [
     path:'/home',
     name:'Home',
     component:Home,
-    redirect:'/info',
+    redirect:'/all/info',
     children:[
       {
-        path: '/info',
+        path: '/all/info',
         name: 'ComprehensiveInfo',
         component: ComprehensiveInfo,
       },
       {
-        path: '/system',
+        path: '/sys/manager',
         name: 'system',
         component: System,
         children:[
@@ -52,10 +52,10 @@ const routes = [
             component:Users
           }
         ],
-        redirect:'/system/mechanism'
+        redirect:'/sys/manager/mechanism'
       },
       {
-        path: '/bind',
+        path: '/device/serial',
         name: 'bind',
         component: Bind,
         children:[
@@ -71,15 +71,15 @@ const routes = [
           }
         
           ],
-        redirect:'/bind/AccountObersve'
+        redirect:'/device/serial/AccountObersve'
       },
         {
-          path: '/equipment',
+          path: '/device/manager',
           name: 'equipment',
           component: Equipment
         },
         {
-          path: '/obersve',
+          path: '/run/info',
           name: 'obersve',
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
@@ -87,7 +87,7 @@ const routes = [
           component: Obersve
         },
         {
-          path:'/log',
+          path:'/loger/list',
           name:'log',
           component:Log
         }

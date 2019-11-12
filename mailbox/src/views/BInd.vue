@@ -5,14 +5,14 @@
                 class="el-menu-demo" 
                 background-color = "#112e57"
                 text-color="#fff"
-                default-active="/bind/AccountObersve"
+                default-active="/device/serial/AccountObersve"
                 router
                 active-text-color="#fff"
                 >
-                <el-menu-item index="/bind/AccountObersve">
+                <el-menu-item index="/device/serial/AccountObersve">
                     <i class="el-icon-collection-tag"></i><span slot="title">账号订阅</span>
                 </el-menu-item>
-                <el-menu-item index="/bind/EquBind"><i class="el-icon-link"></i>设备绑定</el-menu-item>
+                <el-menu-item index="/device/serial/EquBind"><i class="el-icon-link"></i>设备绑定</el-menu-item>
                 </el-menu>
             </el-aside>
             <el-main>

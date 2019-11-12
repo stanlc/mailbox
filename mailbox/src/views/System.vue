@@ -9,10 +9,10 @@
                 router
                 active-text-color="#fff"
                 >
-                <el-menu-item index="/system/mechanism">
+                <el-menu-item index="/sys/manager/mechanism">
                     <i class="el-icon-office-building"></i><span slot="title">组织机构</span>
                 </el-menu-item>
-                <el-menu-item index="/system/users"><i class="el-icon-s-custom"></i>用户管理</el-menu-item>
+                <el-menu-item index="/sys/manager/users"><i class="el-icon-s-custom"></i>用户管理</el-menu-item>
                 </el-menu>
             </el-aside>
             <el-main>

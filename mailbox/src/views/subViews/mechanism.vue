@@ -6,48 +6,22 @@
                <el-main>
                    <el-form>
                        <el-form-item>
-                           <el-button type="primary">录入同级</el-button>
-                           <el-button type="primary" @click="sub()">录入下级</el-button>
-                           <el-button type="primary">编辑</el-button>
-                           <el-button type="danger">删除</el-button>
+                           <el-button type="primary"  @click="showSame">录入同级</el-button>
+                           <el-button type="primary" @click="show">录入下级</el-button>
+                           <el-button type="primary" @click="showEditOrgan">编辑</el-button>
+                           <el-button type="danger"  @click="delorgan(3)">删除</el-button>
                        </el-form-item>
                    </el-form>
                    <el-tree :data="organList" :props="defaultProps" @node-click="handleNodeClick" :highlight-current="false"></el-tree>
                </el-main>
            </el-container>
-           <div class="modal-box-sub" v-if="isShow">
-               <el-container>
-                   <el-header>录入下级</el-header>
-                   <el-main>
-                       <p>录入下级组织机构</p>
-                       <el-form  v-model="form" :inline="true" size="mini" :label-position="labelPosition">
-                            <el-form-item label="机构名称:">
-                                <el-input  v-model="form.organName"></el-input>
-                            </el-form-item>
-                            <el-form-item  label="机构描述:">
-                                <el-input v-model="form.organDesc"></el-input>
-                            </el-form-item>
-                            <el-form-item label="负责人:">
-                                <el-input  v-model="form.organPerson"></el-input>
-                            </el-form-item>
-                            <el-form-item  label="联系电话:">
-                                <el-input v-model="form.phone"></el-input>
-                            </el-form-item>
-                            <el-form-item label="机构经度:">
-                                <el-input  v-model="form.organLatitude"></el-input>
-                            </el-form-item>
-                            <el-form-item  label="机构纬度:">
-                                <el-input v-model="form.organLongitude"></el-input>
-                            </el-form-item>
-                        </el-form>
-                        <el-form :inline="true">
-                            <el-form-item>
-                                <el-button type="primary" @click="addSubOrgan">确认</el-button>
-                                <el-button type="primary">取消</el-button>
-                            </el-form-item>
-                        </el-form>
-                   </el-main>
-               </el-container>
+           <div class="modal-box">
+                <same-input :show="this.SameShow" @func="FromSameInput"></same-input>
+                <sub-input :show="this.SubShow" :nodeData="this.tableData" @func="FromSubInput"></sub-input>
+                <role-input :show="this.RoleShow" @func="FromRoleInput"></role-input>
+                <role-edit :show="this.RoleEditShow" @func="FromRoleEdit"></role-edit>
+                <edit-organ :show="this.EditOrganShow" :nodeData="this.tableData" @func="FromEditOrgan"></edit-organ>
+                <role-config :show="this.RoleConfigShow" :nodeData="this.tableData" @func="FromRoleConfig"></role-config>
            </div>
        </div>
         <div class="right">
@@ -56,10 +30,10 @@
                 <el-main>
                     <el-form>
                        <el-form-item>
-                           <el-button type="primary">录入</el-button>
-                           <el-button type="primary">编辑</el-button>
-                           <el-button type="danger">删除</el-button>
-                           <el-button type="primary">权限配置</el-button>
+                           <el-button type="primary" @click="showRole">录入</el-button>
+                           <el-button type="primary" @click="showRoleEdit">编辑</el-button>
+                           <el-button type="danger" @click="roleDel">删除</el-button>
+                           <el-button type="primary" @click="showROleConfig">权限配置</el-button>
                        </el-form-item>
                     </el-form>
                     <el-table
@@ -96,6 +70,12 @@
 </template>
 
 <script>
+import RoleInput from '../../components/RoleInput'
+import SubInput from '../../components/SubInput'
+import SameInput from '../../components/SameInput'
+import RoleEdit from '../../components/RoleEdit'
+import EditOrgan from '../../components/EditOrgan'
+import RoleConfig from '../../components/RoleConfig'
 export default {
     data(){
         return {
@@ -106,7 +86,7 @@ export default {
             tableData:[],
             organList:[],
             form:{
-                "action": 0,
+                "action": 2,                //1建平级，2建下级
                 'organName':'',
                 'organDesc':'',
                 'phone':'',
@@ -114,22 +94,84 @@ export default {
                 'organLatitude':'',
                 'organLongitude':''
             },
-            isShow:false,
+            roleForm:{
+                "organId": 0,
+                "roleDesc": "",
+                "roleName": ""
+            },
+            updateRoleForm:{
+                "id": 0,
+                "organId": 0,
+                "roleDesc": "",
+                "roleName": "" 
+            },
+            SubShow:false,
+            SameShow:false,
+            RoleShow:false,
+            RoleEditShow:false,
+            EditOrganShow:false,
+            RoleConfigShow:false,
             labelPosition:'right',
         }
     },
+    components:{
+        RoleInput,
+        SubInput,
+        RoleEdit,
+        SameInput,
+        EditOrgan,
+        RoleConfig,
+    },
     mounted(){
         this.getOrganList();
-
     },
+   
     methods:{
         handleNodeClick(data){
            this.tableData.shift()
            this.tableData.push(data)
-            
+           console.log(data)
         },
+        //显示模态框
+        showSame(){
+            this.SameShow = true;
+        },
+        show(){
+            this.SubShow = true;
+        },
+        showRole(){
+            this.RoleShow = true;
+        },
+        showRoleEdit(){
+            this.RoleEditShow = true
+        },
+        showEditOrgan(){
+            this.EditOrganShow = true
+        },
+        showROleConfig(){
+            this.RoleConfigShow = true
+        },
+        //子组件传值
+        FromSubInput(data){
+            this.SubShow = data
+        },
+        FromRoleInput(data){
+            this.RoleShow = data
+        },
+        FromRoleEdit(data){
+            this.RoleEditShow = data
+        },
+        FromSameInput(data){
+            this.SameShow = data
+        },
+        FromEditOrgan(data){
+            this.EditOrganShow = data
+        },
+        FromRoleConfig(data){
+            this.RoleConfigShow = data
+        },
+        //组织机构方法
         getOrganList(){
-           
             this.$http.post('/organ/list').then(res =>{
                this.organList = res.data.data   
             })
@@ -139,9 +181,38 @@ export default {
                 console.log(res)
             })
         },
-        sub(){
-            this.isShow = true;
-        }
+       
+        delorgan(id){
+            this.$http.delete(`/organ/delete/${id}`).then(res =>{
+                console.log(res)
+            })
+        },
+        editOrgan(){
+            this.$http.post('/organ/edit').then(res=>{
+                console.log(res)
+            })
+        },
+        //角色管理方法
+        roleAdd(){
+            this.$http.post('role/add',this.roleForm).then(res =>{
+                console.log(res)
+            })
+        },
+        roleEdit(){
+             this.$http.post('role/edit',this.updateRoleForm).then(res =>{
+                console.log(res)
+            })
+        },
+        roleDel(id){
+             this.$http.delete(`/organ/delete/${id}`).then(res =>{
+                console.log(res)
+            })
+        },
+        roleConfig(roleId){        //授权指定角色权限
+            this.$http.post(`/resource/auth/${roleId}`).then(res=>{
+                console.log(res)
+            })
+        },
     }
 }
 </script>
@@ -160,14 +231,22 @@ export default {
 .el-input,.el-select{
         width:150px;
     }
-.modal-box-sub{
+
+.role-input{
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     bottom: 0;
     left:50%;
-    .left-input,.right-input{
-        float: left;
+    .el-container{
+        width: 26vw;
+        height: 13vw;
     }
+}  
+.modal-box-sub{
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    left:50%;
     .el-container{
         width: 38vw;
         height: 23vw;
