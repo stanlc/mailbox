@@ -5,15 +5,15 @@
             <el-main>
                 <el-form v-model="roleForm" label-width="120px" size="mini">
                     <el-form-item  label="角色名称:">
-                        <el-input v-model="roleForm.roleName">{{roleForm.roleName}}</el-input>
+                        <el-input v-model="roleForm.roleName"></el-input>
                     </el-form-item>
                     <el-form-item  label="角色描述:">
-                        <el-input v-model="roleForm.roleDesc">{{roleForm.roleDesc}}</el-input>
+                        <el-input v-model="roleForm.roleDesc"></el-input>
                     </el-form-item>
                 </el-form>
                 <el-form :inline="true">
                     <el-form-item>
-                        <el-button type="primary" @click="roleAdd">提交</el-button>
+                        <el-button type="primary" @click="roleEdit">提交修改</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="hide">取消</el-button>
@@ -40,24 +40,28 @@
 export default {
     data(){
         return {
-             roleForm:{
-                "organId": 0,
-                "roleDesc": "",
-                "roleName": ""
-            },
+             roleForm:{}
         }
+    },
+    updated(){
+       this.upadateList()
     },
     props:{
         show:Boolean,
+        roleData:Array,
     },
     methods:{
-        roleAdd(){
-            this.$http.post('role/add',this.roleForm).then(res =>{
+        roleEdit(){
+            this.hide();
+            this.$http.post('/role/edit',this.roleForm).then(res=>{
                 console.log(res)
             })
         },
-         hide(){
+        hide(){
             this.$emit('func',false);
+        },
+        upadateList(){
+            this.roleForm = this.roleData[0][0];
         }
     }
 }

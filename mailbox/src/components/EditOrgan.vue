@@ -5,7 +5,7 @@
             <el-main>
                 <el-form  v-model="form" :inline="true" size="mini">
                         <el-form-item label="机构名称:">
-                            <el-input  v-model="form.organName" :placeholder="nodeData.organName"></el-input>
+                            <el-input  v-model="form.organName" :defaultVal="this.nodeData.organName"></el-input>
                         </el-form-item>
                         <el-form-item  label="机构描述:">
                             <el-input v-model="form.organDesc"></el-input>
@@ -58,8 +58,7 @@
 export default {
     data(){
         return{
-            form:{
-                "action": 1,                //1建平级，2建下级
+            form:{            
                 'organName':'',
                 'organDesc':'',
                 'phone':'',
@@ -68,6 +67,10 @@ export default {
                 'organLongitude':''
             },
         }
+    },
+    updated(){
+        this.getFormData();
+           
     },
     props:{
         show:Boolean,
@@ -79,9 +82,14 @@ export default {
         },
         addSubOrgan(){
             this.$http.post('/organ/edit',this.form).then(res =>{
-                console.log(res)
-            })
+               this.hide();
+               console.log(res.data)
+            });
+
         },
+        getFormData(){
+            this.form = this.nodeData[0] 
+        }
     }
 }
 </script>

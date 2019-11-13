@@ -9,7 +9,7 @@
                            <el-button type="primary"  @click="showSame">录入同级</el-button>
                            <el-button type="primary" @click="show">录入下级</el-button>
                            <el-button type="primary" @click="showEditOrgan">编辑</el-button>
-                           <el-button type="danger"  @click="delorgan(9)">删除</el-button>
+                           <el-button type="danger"  @click="delorgan(tableData[0].id)">删除</el-button>
                        </el-form-item>
                    </el-form>
                    <el-tree :data="organList" :props="defaultProps" @node-click="handleNodeClick" :highlight-current="false"></el-tree>
@@ -18,10 +18,10 @@
            <div class="modal-box">
                 <same-input :show="this.SameShow" @func="FromSameInput"></same-input>
                 <sub-input :show="this.SubShow" :nodeData="this.tableData" @func="FromSubInput"></sub-input>
-                <role-input :show="this.RoleShow" @func="FromRoleInput"></role-input>
-                <role-edit :show="this.RoleEditShow" @func="FromRoleEdit"></role-edit>
+                <role-input :show="this.RoleShow" @func="FromRoleInput" :nodeData="this.tableData"></role-input>
+                <role-edit :show="this.RoleEditShow" @func="FromRoleEdit" :roleData="this.roleTableSelected"></role-edit>
                 <edit-organ :show="this.EditOrganShow" :nodeData="this.tableData" @func="FromEditOrgan"></edit-organ>
-                <role-config :show="this.RoleConfigShow" :nodeData="this.tableData" @func="FromRoleConfig"></role-config>
+                <role-config :show="this.RoleConfigShow" :listData="this.roleListData" @func="FromRoleConfig"></role-config>
            </div>
        </div>
         <div class="right">
@@ -32,13 +32,15 @@
                        <el-form-item>
                            <el-button type="primary" @click="showRole">录入</el-button>
                            <el-button type="primary" @click="showRoleEdit">编辑</el-button>
-                           <el-button type="danger" @click="roleDel">删除</el-button>
-                           <el-button type="primary" @click="showROleConfig">权限配置</el-button>
+                           <el-button type="danger" @click="roleDel(roleTableSelected[0][0].id)">删除</el-button>
+                           <el-button type="primary" @click="showROleConfig(tableData[0].id)">权限配置</el-button>
                        </el-form-item>
                     </el-form>
                     <el-table
-                    :data="tableData"
-                    style="width: 100%">
+                    :data="roleData"
+                    style="width: 100%"
+                    @select="roleSelect"
+                    >
                         <el-table-column
                         type="selection"
                         width="55">
@@ -49,12 +51,12 @@
                         </el-table-column>
                         <el-table-column
                         label="用户名称"
-                        prop="organPerson"
+                        prop="roleName"
                         >
                         </el-table-column>
                         <el-table-column
                         label="角色描述"
-                        prop="organDesc"
+                        prop="roleDesc"
                         >
                         </el-table-column>
                         <el-table-column
@@ -85,26 +87,9 @@ export default {
             },
             tableData:[],
             organList:[],
-            form:{
-                "action": 2,                //1建平级，2建下级
-                'organName':'',
-                'organDesc':'',
-                'phone':'',
-                'organPerson':'',
-                'organLatitude':'',
-                'organLongitude':''
-            },
-            roleForm:{
-                "organId": 0,
-                "roleDesc": "",
-                "roleName": ""
-            },
-            updateRoleForm:{
-                "id": 0,
-                "organId": 0,
-                "roleDesc": "",
-                "roleName": "" 
-            },
+            roleData:[],
+            roleTableSelected:[],//被选中角色
+            roleListData:[],//选中角色权限列表
             SubShow:false,
             SameShow:false,
             RoleShow:false,
@@ -127,10 +112,10 @@ export default {
     },
    
     methods:{
-        handleNodeClick(data){
+        handleNodeClick(data){          
            this.tableData.shift()
            this.tableData.push(data)
-           console.log(data)
+           this.getRoleList(data.id)
         },
         //显示模态框
         showSame(){
@@ -148,27 +133,35 @@ export default {
         showEditOrgan(){
             this.EditOrganShow = true
         },
-        showROleConfig(){
+        showROleConfig(id){
             this.RoleConfigShow = true
+             this.$http.get(`resource/list/${id}`).then(res=>{
+               this.roleListData = res.data.data
+            })
         },
         //子组件传值
         FromSubInput(data){
-            this.SubShow = data
+            this.SubShow = data;
+            this.getOrganList();
         },
         FromRoleInput(data){
-            this.RoleShow = data
+            this.RoleShow = data;
         },
         FromRoleEdit(data){
-            this.RoleEditShow = data
+            this.RoleEditShow = data;
+            this.getOrganList();
         },
         FromSameInput(data){
-            this.SameShow = data
+            this.SameShow = data;
+            this.getOrganList();
         },
         FromEditOrgan(data){
-            this.EditOrganShow = data
+            this.EditOrganShow = data;
+            this.getOrganList();
         },
         FromRoleConfig(data){
-            this.RoleConfigShow = data
+            this.RoleConfigShow = data;
+            this.getOrganList();
         },
         //组织机构方法
         getOrganList(){
@@ -182,10 +175,15 @@ export default {
             })
         },
        
-        delorgan(id){
+        delorgan(id){                    //删除组织机构
             this.$http.delete(`/organ/delete/${id}`).then(res =>{
-                console.log(res)
+                console.log(res);
+                this.$message('删除成功');
+                this.getOrganList();
+            }).catch(()=>{
+                this.$message('删除失败');
             })
+
         },
         editOrgan(){
             this.$http.post('/organ/edit').then(res=>{
@@ -193,26 +191,25 @@ export default {
             })
         },
         //角色管理方法
-        roleAdd(){
-            this.$http.post('role/add',this.roleForm).then(res =>{
-                console.log(res)
-            })
-        },
-        roleEdit(){
-             this.$http.post('role/edit',this.updateRoleForm).then(res =>{
-                console.log(res)
+        getRoleList(id){                   //获取角色列表
+            this.$http.post(`/role/list/${id}`).then((res)=>{
+                if(this.roleData.length>1){
+                    this.roleData.shift()
+                }
+                this.roleData =res.data.data
             })
         },
         roleDel(id){
-             this.$http.delete(`/organ/delete/${id}`).then(res =>{
-                console.log(res)
+             this.$http.delete(`/role/delete/${id}`).then(() =>{
+                this.$message('删除成功')
+                //更新角色列表
             })
+            
         },
-        roleConfig(roleId){        //授权指定角色权限
-            this.$http.post(`/resource/auth/${roleId}`).then(res=>{
-                console.log(res)
-            })
-        },
+        //角色Table
+        roleSelect(e){
+            this.roleTableSelected[0] = e
+        }
     }
 }
 </script>
@@ -273,6 +270,7 @@ export default {
     }
 
 }
+
 
 
 </style>

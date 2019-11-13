@@ -25,7 +25,7 @@ export default {
       menuList:[]
     }
   },
-  mounted(){
+  created(){
     this.$http.get('/resource/menuList').then(res=>{
       this.menuList = res.data.data
     })

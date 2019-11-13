@@ -47,13 +47,18 @@ export default {
             },
         }
     },
+    updated(){
+        this.roleForm.organId = this.nodeData[0].id
+    },
     props:{
         show:Boolean,
+        nodeData:Array,
     },
     methods:{
         roleAdd(){
             this.$http.post('role/add',this.roleForm).then(res =>{
-                console.log(res)
+                this.hide();
+                this.$message('添加角色成功');
             })
         },
          hide(){

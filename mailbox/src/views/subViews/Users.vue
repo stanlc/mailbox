@@ -1,3 +1,12 @@
 <template>
-    <div>users</div>
+    <el-container>
+        <el-header>用户管理</el-header>
+        <el-main>
+            <el-form>
+                <el-form-item>
+                    <el-input></el-input>
+                </el-form-item>
+            </el-form>
+        </el-main>
+    </el-container>
 </template>

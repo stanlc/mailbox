@@ -23,6 +23,9 @@
                         <el-form-item  label="机构纬度:">
                             <el-input v-model="form.organLongitude"></el-input>
                         </el-form-item>
+                        <el-form-item  label="地图定点:">
+                            <el-button type="success" icon="el-icon-map-location" @click="isMapshow=true">地图定点</el-button>
+                        </el-form-item>
                     </el-form>
                     <el-form :inline="true">
                         <el-form-item>
@@ -30,6 +33,9 @@
                             <el-button type="primary" @click="hide">取消</el-button>
                         </el-form-item>
                     </el-form>
+                    <div class="mapbox" v-if="isMapshow">
+                        <Amap></Amap>
+                    </div>
             </el-main>
         </el-container>
     </div>
@@ -54,13 +60,18 @@
     .el-input,.el-select{
         width:150px;
     }
+    .mapbox{
+        position: absolute;
+        top:0;
+        left:0;
+    }
 </style>
 <script>
+import Amap from './Amap'
 export default {
     data(){
         return{
             form:{
-                              //1建平级，2建下级
                 'organName':'',
                 'organDesc':'',
                 'phone':'',
@@ -68,6 +79,7 @@ export default {
                 'organLatitude':'',
                 'organLongitude':''
             },
+            isMapshow:false,
         }
     },
     props:{
@@ -82,6 +94,9 @@ export default {
                 console.log(res)
             })
         },
+    },
+    components:{
+        Amap,
     }
 }
 </script>

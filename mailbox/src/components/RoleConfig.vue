@@ -3,17 +3,17 @@
         <el-container>
             <el-header>权限配置</el-header>
             <el-main>
-                <el-tree
-                :data="data"
+                <p>菜单权限</p>
+                <el-tree 
+                :data="roleListData" 
+                :props="defaultProps" 
+                :highlight-current="false"
                 show-checkbox
-                node-key="id"
-                :default-expanded-keys="[2, 3]"
-                :default-checked-keys="[5]"
-                :props="defaultProps">
+                >
                 </el-tree>
                 <el-form :inline="true">
                     <el-form-item>
-                        <el-button type="primary">提交</el-button>
+                        <el-button type="primary" @click="test">提交</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="info" @click="hide">取消</el-button>
@@ -31,8 +31,8 @@
     bottom: 0;
     left:50%;
     .el-container{
-        width: 38vw;
-        height: 23vw;
+        width: 20vw;
+        height: 26vw;
         .el-header{
             background-color: #19437e !important;
         }
@@ -43,6 +43,18 @@
     .el-input,.el-select{
         width:150px;
     }
+    .el-tree{
+    background-color: transparent;
+    margin-bottom: 20px;
+    color: #fff;
+    .el-tree-node__content{
+        background-color: transparent;
+    }
+    :hover{
+        background-color: transparent;
+    }
+
+    }
 </style>
 <script>
 export default {
@@ -50,33 +62,77 @@ export default {
         return{
             configList:[],
             defaultProps: {
-            children: 'children',
-            label: 'label'
-            }
+                children: 'children',
+                label: 'label'
+            },
+            roleListData:[
+                {
+                    'label':'系统管理',
+                    'children':[
+                        {
+                            'label':'组织机构'
+                        },
+                        {
+                            'label':'用户管理'
+                        }
+                    ]
+                },
+                {
+                    'label':'设备绑定',
+                    'children':[
+                        {
+                            'label':'账号订阅'
+                        },
+                        {
+                            'label':'设备绑定'
+                        }
+                    ]
+                },
+                {
+                    'label':'设备管理'
+                },
+                {
+                    'label':'运行监测'
+                },
+                {
+                    'label':'操作日志'
+                },
+                {
+                    'label':'综合信息'
+                }
+            ]
         }
     },
     props:{
         show:Boolean,
-        nodeData:Array,
+        listData:Array,
+    },
+    defaultProps: {
+        children: 'childrenList',
+        label: 'resourceName'
     },
     mounted(){
-        // this.getRoleList(2)
+       
     },
     methods:{
+        
         hide(){
             this.$emit('func',false);
         },
-        getRoleList(roleId){
-            this.$http.get(`/resource/list/${roleId}`).then(res=>{
-                console.log(res.data)
-            })
+        test(){
+            //  this.$http.get(`resource/list/${id}`).then(res=>{
+            //    console.log(res.data.data)
+               
+            // })
+            console.log(this.listData)
         },
 
-        addSubOrgan(){
-            this.$http.post('/organ/edit',this.form).then(res =>{
-                console.log(res)
+        getRoleAuthList(id){       //获取角色权限列表
+            this.$http.get(`resource/list/${id}`).then(res=>{
+               console.log(res.data.data)
+               //this.configList = res.data.data
             })
-        },
+        }
     }
 }
 </script>

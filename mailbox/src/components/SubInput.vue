@@ -59,15 +59,20 @@
 export default {
     data(){
         return{
-            form:{          
+            form:{      
+                'action':'2',    
                 'organName':'',
                 'organDesc':'',
                 'phone':'',
                 'organPerson':'',
                 'organLatitude':'',
                 'organLongitude':'',
+                'referId':''
             },
         }
+    },
+    updated(){
+        this.form.referId = this.nodeData[0].id
     },
     props:{
         show:Boolean,
@@ -75,13 +80,14 @@ export default {
     },
     methods:{
         hide(){
-            
             this.$emit('func',false);
         },
         addSubOrgan(){
             this.$http.post('/organ/add',this.form).then(res =>{
+                this.hide();
+                this.$message('添加成功');
                 console.log(res)
-            })
+            }) 
         },
     }
 }
