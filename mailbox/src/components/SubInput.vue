@@ -85,8 +85,7 @@ export default {
         addSubOrgan(){
             this.$http.post('/organ/add',this.form).then(res =>{
                 this.hide();
-                this.$message('添加成功');
-                console.log(res)
+                this.$message(res.data.message)
             }) 
         },
     }

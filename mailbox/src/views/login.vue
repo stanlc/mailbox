@@ -47,7 +47,7 @@ export default {
             this.$http.post('/user/login',{userName:'admin',password:'123456'}).then(res=>{
                 if(res.data.code=='200'){
                     localStorage.setItem('token',res.headers['x-user-token']);
-                    localStorage.setItem('userInfo',JSON.stringify(res.data.data));
+                    localStorage.setItem('userInfo',JSON.stringify(res.data.data));     //保存用户信息
                     this.$router.push({ path: '/home' });
                 }else{
                     this.$message({

@@ -90,8 +90,10 @@ export default {
             this.$emit('func',false);
         },
         addSubOrgan(){
+            this.hide();
             this.$http.post('/organ/add',this.form).then(res =>{
-                console.log(res)
+                this.hide()
+                this.$message(res.data.message)
             })
         },
     },

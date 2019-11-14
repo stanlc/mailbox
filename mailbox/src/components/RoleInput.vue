@@ -56,7 +56,7 @@ export default {
     },
     methods:{
         roleAdd(){
-            this.$http.post('role/add',this.roleForm).then(res =>{
+            this.$http.post('role/add',this.roleForm).then(() =>{
                 this.hide();
                 this.$message('添加角色成功');
             })

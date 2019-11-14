@@ -1,34 +1,34 @@
 <template>
-    <div class="modal-box-sub" v-if="show">
+    <div class="modal-box-sub" v-if="show" key="edit">
         <el-container>
             <el-header>编辑组织结构</el-header>
             <el-main>
-                <el-form  v-model="form" :inline="true" size="mini">
+                <el-form  v-model="OrganForm" :inline="true" size="mini">
                         <el-form-item label="机构名称:">
-                            <el-input  v-model="form.organName" :defaultVal="this.nodeData.organName"></el-input>
+                            <el-input  v-model="OrganForm.organName" ></el-input>
                         </el-form-item>
                         <el-form-item  label="机构描述:">
-                            <el-input v-model="form.organDesc"></el-input>
+                            <el-input v-model="OrganForm.organDesc" ></el-input>
                         </el-form-item>
                         <el-form-item label="负责人:">
-                            <el-input  v-model="form.organPerson"></el-input>
+                            <el-input  v-model="OrganForm.organPerson" ></el-input>
                         </el-form-item>
                         <el-form-item  label="联系电话:">
-                            <el-input v-model="form.phone"></el-input>
+                            <el-input v-model="OrganForm.phone" ></el-input>
                         </el-form-item>
                         <el-form-item label="机构经度:">
-                            <el-input  v-model="form.organLatitude"></el-input>
+                            <el-input  v-model="OrganForm.organLatitude" ></el-input>
                         </el-form-item>
                         <el-form-item  label="机构纬度:">
-                            <el-input v-model="form.organLongitude"></el-input>
+                            <el-input v-model="OrganForm.organLongitude" ></el-input>
                         </el-form-item>
-                    </el-form>
-                    <el-form :inline="true">
-                        <el-form-item>
-                            <el-button type="primary" @click="addSubOrgan">确认</el-button>
-                            <el-button type="primary" @click="hide">取消</el-button>
-                        </el-form-item>
-                    </el-form>
+                </el-form>
+                <el-form :inline="true">
+                    <el-form-item>
+                        <el-button type="primary" @click="addSubOrgan">确认</el-button>
+                        <el-button type="primary" @click="hide">取消</el-button>
+                    </el-form-item>
+                </el-form>
             </el-main>
         </el-container>
     </div>
@@ -57,20 +57,19 @@
 <script>
 export default {
     data(){
-        return{
-            form:{            
+        return{ 
+            OrganForm:{
                 'organName':'',
                 'organDesc':'',
                 'phone':'',
                 'organPerson':'',
                 'organLatitude':'',
                 'organLongitude':''
-            },
+            }
         }
     },
     updated(){
-        this.getFormData();
-           
+        this.OrganForm = this.nodeData[0]
     },
     props:{
         show:Boolean,
@@ -81,15 +80,11 @@ export default {
             this.$emit('func',false);
         },
         addSubOrgan(){
-            this.$http.post('/organ/edit',this.form).then(res =>{
+            this.$http.post('/organ/edit',this.OrganForm).then(res =>{
                this.hide();
-               console.log(res.data)
+               this.$message(res.data.message)
             });
-
         },
-        getFormData(){
-            this.form = this.nodeData[0] 
-        }
     }
 }
 </script>

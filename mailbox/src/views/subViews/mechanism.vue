@@ -6,22 +6,24 @@
                <el-main>
                    <el-form>
                        <el-form-item>
-                           <el-button type="primary"  @click="showSame">录入同级</el-button>
-                           <el-button type="primary" @click="show">录入下级</el-button>
-                           <el-button type="primary" @click="showEditOrgan">编辑</el-button>
-                           <el-button type="danger"  @click="delorgan(tableData[0].id)">删除</el-button>
+                           <el-button type="primary"  @click="SameShow = true" v-if="SelectedParentId === null ? true : false">录入同级</el-button>
+                           <el-button type="primary" @click="SubShow = true">录入下级</el-button>
+                           <el-button type="primary" @click="EditOrganShow = true">编辑</el-button>
+                           <el-button type="danger"  @click="delorgan(SelectedOrganId)">删除</el-button>
                        </el-form-item>
                    </el-form>
                    <el-tree :data="organList" :props="defaultProps" @node-click="handleNodeClick" :highlight-current="false"></el-tree>
                </el-main>
            </el-container>
            <div class="modal-box">
-                <same-input :show="this.SameShow" @func="FromSameInput"></same-input>
-                <sub-input :show="this.SubShow" :nodeData="this.tableData" @func="FromSubInput"></sub-input>
-                <role-input :show="this.RoleShow" @func="FromRoleInput" :nodeData="this.tableData"></role-input>
-                <role-edit :show="this.RoleEditShow" @func="FromRoleEdit" :roleData="this.roleTableSelected"></role-edit>
-                <edit-organ :show="this.EditOrganShow" :nodeData="this.tableData" @func="FromEditOrgan"></edit-organ>
-                <role-config :show="this.RoleConfigShow" :listData="this.roleListData" @func="FromRoleConfig"></role-config>
+                <!-- 组织管理 -->
+                <same-input :show="SameShow" @func="FromSameInput"></same-input>      
+                <sub-input :show="SubShow" :nodeData="SelectedOrganData" @func="FromSubInput"></sub-input>
+                <edit-organ :show="EditOrganShow" :nodeData="SelectedOrganData" @func="FromEditOrgan"></edit-organ>
+                <!-- 角色管理 -->
+                <role-input :show="RoleShow" @func="FromRoleInput" :nodeData="SelectedOrganData"></role-input>
+                <role-edit :show="RoleEditShow" @func="FromRoleEdit" :roleData="roleSelectedData"></role-edit>
+                <role-config :show="RoleConfigShow" :listData="roleListData" @func="FromRoleConfig"></role-config>
            </div>
        </div>
         <div class="right">
@@ -30,14 +32,14 @@
                 <el-main>
                     <el-form>
                        <el-form-item>
-                           <el-button type="primary" @click="showRole">录入</el-button>
-                           <el-button type="primary" @click="showRoleEdit">编辑</el-button>
-                           <el-button type="danger" @click="roleDel(roleTableSelected[0][0].id)">删除</el-button>
-                           <el-button type="primary" @click="showROleConfig(tableData[0].id)">权限配置</el-button>
+                           <el-button type="primary" @click="RoleShow = true">录入</el-button>
+                           <el-button type="primary" @click="RoleEditShow = true">编辑</el-button>
+                           <el-button type="danger" @click="roleDel(SelectedRoleId)">删除</el-button>
+                           <el-button type="primary" @click="RoleConfigShow = true">权限配置</el-button>
                        </el-form-item>
                     </el-form>
                     <el-table
-                    :data="roleData"
+                    :data="roleList"
                     style="width: 100%"
                     @select="roleSelect"
                     >
@@ -85,18 +87,23 @@ export default {
                 children: 'childrenList',
                 label: 'organDesc'
             },
-            tableData:[],
+            SelectedOrganData:[],//被选中组织数据
             organList:[],
             roleData:[],
+            SelectedOrganId:0,//被选中组织Id
+            SelectedRoleId:0,//被选中角色Id
+            SelectedParentId:0,//被选中组织父Id
+            roleList:[],//组织角色列表
             roleTableSelected:[],//被选中角色
             roleListData:[],//选中角色权限列表
+            roleSelectedData:{},//被选中角色数据
+            //模态框控制
             SubShow:false,
             SameShow:false,
             RoleShow:false,
             RoleEditShow:false,
             EditOrganShow:false,
             RoleConfigShow:false,
-            labelPosition:'right',
         }
     },
     components:{
@@ -112,43 +119,17 @@ export default {
     },
    
     methods:{
+        //组织列表Tree点击handle
         handleNodeClick(data){          
-           this.tableData.shift()
-           this.tableData.push(data)
-           this.getRoleList(data.id)
+           this.SelectedOrganData.shift()
+           this.SelectedOrganData.push(data)
+           this.SelectedOrganId = data.id
+           this.SelectedParentId = data.parentId
+           this.getRoleList( this.SelectedOrganId)
         },
-        //显示模态框
-        showSame(){
-            this.SameShow = true;
-        },
-        show(){
-            this.SubShow = true;
-        },
-        showRole(){
-            this.RoleShow = true;
-        },
-        showRoleEdit(){
-            this.RoleEditShow = true
-        },
-        showEditOrgan(){
-            this.EditOrganShow = true
-        },
-        showROleConfig(id){
-            this.RoleConfigShow = true
-             this.$http.get(`resource/list/${id}`).then(res=>{
-               this.roleListData = res.data.data
-            })
-        },
-        //子组件传值
+        //子组件关闭模态框--组织管理
         FromSubInput(data){
             this.SubShow = data;
-            this.getOrganList();
-        },
-        FromRoleInput(data){
-            this.RoleShow = data;
-        },
-        FromRoleEdit(data){
-            this.RoleEditShow = data;
             this.getOrganList();
         },
         FromSameInput(data){
@@ -159,56 +140,58 @@ export default {
             this.EditOrganShow = data;
             this.getOrganList();
         },
+        //子组件关闭模态框--角色管理
+        FromRoleInput(data){
+            this.RoleShow = data;
+            this.getRoleList(this.SelectedOrganId);
+        },
+        FromRoleEdit(data){
+            this.RoleEditShow = data;
+            this.getRoleList(this.SelectedOrganId);
+        },
         FromRoleConfig(data){
             this.RoleConfigShow = data;
-            this.getOrganList();
+            this.getRoleList(this.SelectedOrganId);
         },
         //组织机构方法
+
+        //获取组织机构列表
         getOrganList(){
             this.$http.post('/organ/list').then(res =>{
                this.organList = res.data.data   
             })
         },
-        addSubOrgan(){
-            this.$http.post('/organ/add',this.form).then(res =>{
-                console.log(res)
-            })
-        },
-       
-        delorgan(id){                    //删除组织机构
+
+        //删除组织机构
+        delorgan(id){                    
             this.$http.delete(`/organ/delete/${id}`).then(res =>{
                 console.log(res);
-                this.$message('删除成功');
+                this.$message(res.data.message);
                 this.getOrganList();
             }).catch(()=>{
-                this.$message('删除失败');
+                this.$message('删除组织失败');
             })
 
-        },
-        editOrgan(){
-            this.$http.post('/organ/edit').then(res=>{
-                console.log(res)
-            })
         },
         //角色管理方法
         getRoleList(id){                   //获取角色列表
             this.$http.post(`/role/list/${id}`).then((res)=>{
-                if(this.roleData.length>1){
-                    this.roleData.shift()
-                }
-                this.roleData =res.data.data
+                this.roleList = res.data.data
             })
         },
         roleDel(id){
              this.$http.delete(`/role/delete/${id}`).then(() =>{
                 this.$message('删除成功')
                 //更新角色列表
+                this.getRoleList(this.SelectedOrganId);
             })
             
         },
-        //角色Table
+        //角色Table选择事件
         roleSelect(e){
-            this.roleTableSelected[0] = e
+            this.roleSelectedData = e[0]
+            this.SelectedRoleId = e[0].id
+            console.log(this.roleSelectedData)
         }
     }
 }

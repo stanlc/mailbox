@@ -44,24 +44,26 @@ export default {
         }
     },
     updated(){
-       this.upadateList()
+       this.roleForm = this.roleData
     },
     props:{
         show:Boolean,
-        roleData:Array,
+        roleData:Object,
     },
     methods:{
         roleEdit(){
-            this.hide();
-            this.$http.post('/role/edit',this.roleForm).then(res=>{
-                console.log(res)
-            })
+            // this.hide();
+            // this.$http.post('/role/edit',this.roleForm).then(res=>{
+                
+            //     console.log(res)
+            // })
+            console.log(this.roleForm)
         },
         hide(){
             this.$emit('func',false);
         },
         upadateList(){
-            this.roleForm = this.roleData[0][0];
+            this.roleForm = this.roleData[0];
         }
     }
 }

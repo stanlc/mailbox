@@ -43,35 +43,35 @@
                     :data="tableData"
                     style="width: 100%"
                     :row-class-name="rowStyle"
-                >
+                    >
                     <el-table-column
                     type="selection"
                     width="55">
                     </el-table-column>
                     <el-table-column
                     label="序号"
-                    prop="number"
-                    width="120">
+                    type="index">
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop="deviceName"
                     label="设备名称"
                     >
                     </el-table-column>
                     <el-table-column
-                    prop="state"
-                    label="设备状态">
+                    prop="status"
+                    label="设备状态"
+                    :formatter="statusFormat">
                     </el-table-column>
                     <el-table-column
-                    prop="mac"
+                    prop="deviceMac"
                     label="序列MAC"
                     ></el-table-column>
                     <el-table-column
-                    prop="observer"
+                    prop="deviceAccount"
                     label="订阅账号"
                     ></el-table-column>
                     <el-table-column
-                    prop="mechanism"
+                    prop="organId"
                     label="所属机构"
                     ></el-table-column>
                     <el-table-column
@@ -83,6 +83,11 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination
+                    layout="prev, pager, next"
+                    :total="50"
+                    background>
+                </el-pagination>
                 </div>
            </div>
         </el-main>
@@ -95,18 +100,12 @@ export default {
             equType:'',
             equName:'',
             obersver:'',
-            tableData:[
-                {
-                    number:'01',
-                    name:'1',
-                    state:'开启',
-                    mac:'a12321',
-                    observer:'qweqe',
-                    mechanism:'花园小区',
-
-                }
-            ],
+            tableData:[],  //设备列表
             rowStyle:'rowStyle',
+            deviceForm:{
+                "pageNum": 1,
+                "pageSize": 10
+            },
             form:[
                 {
                     type:'',
@@ -118,11 +117,26 @@ export default {
             ]
         }
     },
+    created(){
+        this.getDeviceList()
+    },
+    computed:{
+    },
     methods:{
-         handleClick(row) {
+        handleClick(row) {
             console.log(row);
         },
-        
+        //获取设备列表
+        getDeviceList(){ 
+            this.$http.post('/device/pagerList',this.deviceForm).then(res=>{
+                this.tableData = res.data.paging.list
+                console.log(res.data.paging.list)
+            })
+        },
+        statusFormat(row){           //设备状态格式化
+            let val = row.status
+            return val==1?'在线':'离线'
+        }
     }
 }
 </script>
@@ -142,7 +156,10 @@ export default {
     .el-form  .el-form-item{
     padding:0 30px 0 0;
     }
-    
+    .el-pagination{
+        position: fixed;
+        bottom: 10px;
+    }
     
     
 </style>
