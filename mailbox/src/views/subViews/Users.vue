@@ -81,7 +81,7 @@
                 </el-table-column>
             </el-table>
             <div class="adduser-box">
-                <add-users :roleList="roleList" :show="addUserShow" @func="FromAddUser"></add-users>
+                <add-users :roleList="roleList" :show="addUserShow" @func="FromAddUser" :organList="organList"></add-users>
             </div>
         </el-main>
     </el-container>
@@ -107,6 +107,7 @@ export default {
     },
     created(){
         this.getUserList()
+        this.getOrganList()
     },
     methods:{
         getUserList(){        //获取用户列表
@@ -126,6 +127,11 @@ export default {
         userSelect(e){
             console.log(e)
             this.selectedUserId = e[0].id
+        },
+        getOrganList(){
+            this.$http.get('/user/organList').then(res=>{
+                this.organList = res.data.data
+            })
         }
     },
     components:{
@@ -140,9 +146,5 @@ export default {
 .el-select /deep/ .el-input__inner {
     background-color: transparent;
  }
-.adduser-box{
-    position: absolute;
-    top:0;
-    left:0;
-}
+
 </style>

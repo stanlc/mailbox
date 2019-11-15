@@ -5,15 +5,16 @@
             <el-main>
                 <p>菜单权限</p>
                 <el-tree 
-                :data="roleListData" 
+                :data="listData" 
                 :props="defaultProps" 
                 :highlight-current="false"
                 show-checkbox
+                @check-change="checkChange"
                 >
                 </el-tree>
                 <el-form :inline="true">
                     <el-form-item>
-                        <el-button type="primary" @click="test">提交</el-button>
+                        <el-button type="primary" @click="roleAuth(roleId)">提交</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="info" @click="hide">取消</el-button>
@@ -61,78 +62,65 @@ export default {
     data(){
         return{
             configList:[],
+            menuList:[],      //当前用户的资源列表
+            idArray:[],
+            defaultcheck:[3,6,9],  //默认选中的权限
             defaultProps: {
-                children: 'children',
-                label: 'label'
+                children: 'childrenList',
+                label: 'resourceName'
             },
-            roleListData:[
-                {
-                    'label':'系统管理',
-                    'children':[
-                        {
-                            'label':'组织机构'
-                        },
-                        {
-                            'label':'用户管理'
-                        }
-                    ]
-                },
-                {
-                    'label':'设备绑定',
-                    'children':[
-                        {
-                            'label':'账号订阅'
-                        },
-                        {
-                            'label':'设备绑定'
-                        }
-                    ]
-                },
-                {
-                    'label':'设备管理'
-                },
-                {
-                    'label':'运行监测'
-                },
-                {
-                    'label':'操作日志'
-                },
-                {
-                    'label':'综合信息'
-                }
-            ]
         }
     },
     props:{
         show:Boolean,
         listData:Array,
+        roleId:Number,
+        roleAuthList:Array,
     },
     defaultProps: {
         children: 'childrenList',
         label: 'resourceName'
     },
     mounted(){
-       
+        
+    },
+    computed:{
+        resourceIds(){
+            return this.idArray.toString()     //权限ID，用逗号连接
+        },
+        authKeys(){
+            return this.roleAuthList.map((item)=>{
+                return item.id
+            })
+        }
     },
     methods:{
         
         hide(){
             this.$emit('func',false);
         },
-        test(){
-            //  this.$http.get(`resource/list/${id}`).then(res=>{
-            //    console.log(res.data.data)
-               
-            // })
-            console.log(this.listData)
+        
+        
+        checkChange(data,ischeck){
+            let authid = data.id,_idArray = this.idArray
+            if(ischeck){
+                if(!_idArray.includes(authid)&&authid.length!=0){
+                    _idArray.push(authid)                   //加入选中的项
+                }
+            }else{
+                _idArray.splice(_idArray.findIndex(item=>item === authid),1)         //删去取消选中的项
+            }
+            this.idArray = _idArray
         },
-
-        getRoleAuthList(id){       //获取角色权限列表
-            this.$http.get(`resource/list/${id}`).then(res=>{
-               console.log(res.data.data)
-               //this.configList = res.data.data
+        roleAuth(id){
+            this.hide()
+            this.$http.post(`/resource/auth/${id}`,{resourceIds:this.resourceIds}).then(()=>{
+                this.$message('授权成功')
+            }).catch(()=>{
+                this.$message('授权失败')
             })
-        }
+        },
+        
     }
 }
 </script>

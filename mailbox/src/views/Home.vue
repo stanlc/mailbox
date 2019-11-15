@@ -1,7 +1,7 @@
 <template>
   <div class="container">
       <Header></Header>
-      <nav-menu></nav-menu>
+      <nav-menu :menuList="menuList"></nav-menu>
       <router-view></router-view>
   </div>
 </template>
@@ -16,8 +16,25 @@ export default {
     Header,
     NavMenu
   },
+  data(){
+    return {
+      menuList:[],
+    }
+  },
+  mounted(){
+    this.getResourceList()
+  },
+  methods:{
+   
+    getResourceList(){
+            this.$http.get('/resource/menuList').then(res=>{
+              this.menuList = res.data.data
+            })
+        }
+    }
+  }
   
-}
+
 </script>
 
 <style lang="scss">

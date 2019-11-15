@@ -9,12 +9,6 @@
           router
           >
           <el-menu-item v-for="item in menuList" :key="item.index" :index="item.sourcePath" >{{item.resourceName}}</el-menu-item>
-          <!-- <el-menu-item index="/info">综合信息</el-menu-item>
-          <el-menu-item index="/obersve">运行监测</el-menu-item>
-          <el-menu-item index="/equipment">设备管理</el-menu-item>
-          <el-menu-item index="/bind">设备绑定</el-menu-item>
-          <el-menu-item index="/log">操作日志</el-menu-item>
-          <el-menu-item index="/system">系统管理</el-menu-item> -->
         </el-menu>
     </div>
 </template>
@@ -22,14 +16,12 @@
 export default {
   data(){
     return{
-      menuList:[]
+     
     }
   },
-  created(){
-    this.$http.get('/resource/menuList').then(res=>{
-      this.menuList = res.data.data
-    })
-  },
+  props:{
+    menuList:Array,
+  }
 }
 </script>
 <style scoped lang="scss">

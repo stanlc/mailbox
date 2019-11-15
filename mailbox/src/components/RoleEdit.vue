@@ -40,7 +40,9 @@
 export default {
     data(){
         return {
-             roleForm:{}
+             roleForm:{
+                 
+             }
         }
     },
     updated(){
@@ -52,18 +54,19 @@ export default {
     },
     methods:{
         roleEdit(){
-            // this.hide();
-            // this.$http.post('/role/edit',this.roleForm).then(res=>{
-                
-            //     console.log(res)
-            // })
-            console.log(this.roleForm)
+            this.hide();
+            this.$http.post('/role/edit',this.roleForm).then(res=>{
+                this.$message('修改成功')
+                console.log(res)
+            })
+            
         },
         hide(){
             this.$emit('func',false);
         },
         upadateList(){
             this.roleForm = this.roleData[0];
+            
         }
     }
 }

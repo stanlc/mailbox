@@ -33,8 +33,8 @@ export default {
   },
   methods:{
     checkout(){
-      
-      localStorage.clear();
+      localStorage.removeItem('token')
+      localStorage.removeItem('userInfo')
       this.$router.push('/login');
     }
   },

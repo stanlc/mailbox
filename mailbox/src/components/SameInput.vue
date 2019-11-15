@@ -14,7 +14,7 @@
                         <el-form-item label="负责人:">
                             <el-input  v-model="form.organPerson"></el-input>
                         </el-form-item>
-                        <el-form-item  label="联系电话:">
+                        <el-form-item  label="联系电话:" @change="checkMobile(value)">
                             <el-input v-model="form.phone"></el-input>
                         </el-form-item>
                         <el-form-item label="机构经度:">
@@ -95,6 +95,10 @@ export default {
                 this.hide()
                 this.$message(res.data.message)
             })
+        },
+        checkMobile (number) {
+            var partten = /^(13[0-9]|14[0-9]|15[0-9]|16[6]|18[0-9]|19[6,9]|17[0-9])\d{8}$/i;
+            return partten.test(number);
         },
     },
     components:{

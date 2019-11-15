@@ -30,6 +30,7 @@ const routes = [
     name:'Home',
     component:Home,
     redirect:'/all/info',
+   
     children:[
       {
         path: '/all/info',

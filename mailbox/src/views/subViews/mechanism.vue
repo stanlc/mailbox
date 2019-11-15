@@ -23,7 +23,7 @@
                 <!-- 角色管理 -->
                 <role-input :show="RoleShow" @func="FromRoleInput" :nodeData="SelectedOrganData"></role-input>
                 <role-edit :show="RoleEditShow" @func="FromRoleEdit" :roleData="roleSelectedData"></role-edit>
-                <role-config :show="RoleConfigShow" :listData="roleListData" @func="FromRoleConfig"></role-config>
+                <role-config :show="RoleConfigShow" :listData="roleListData" @func="FromRoleConfig" :roleId="SelectedRoleId" :roleAuthList="roleAuthList"></role-config>
            </div>
        </div>
         <div class="right">
@@ -96,6 +96,7 @@ export default {
             roleList:[],//组织角色列表
             roleTableSelected:[],//被选中角色
             roleListData:[],//选中角色权限列表
+            roleAuthList:[],//选中角色已授权权限
             roleSelectedData:{},//被选中角色数据
             //模态框控制
             SubShow:false,
@@ -116,6 +117,7 @@ export default {
     },
     mounted(){
         this.getOrganList();
+        this.getReourceList();
     },
    
     methods:{
@@ -187,11 +189,31 @@ export default {
             })
             
         },
+        getReourceList(){
+            this.$http.get('/resource/menuList').then(res=>{
+                this.roleListData = res.data.data           //获取当前用户的资源列表
+            })
+        },
         //角色Table选择事件
         roleSelect(e){
             this.roleSelectedData = e[0]
             this.SelectedRoleId = e[0].id
-            console.log(this.roleSelectedData)
+            this.getMenuList(this.SelectedRoleId)
+        },
+        getMenuList(id){
+            this.$http.get(`/resource/list/${id}`).then(res=>{
+                let list = res.data.data
+                let authList = list.filter((item)=>{
+                    return item.isAuth===1        //获取已授权的一级资源列表
+                })
+                let childrens = authList.map((item)=>{
+                    return item.childrenList
+                })[0].filter((item)=>{
+                    return item.isAuth===1        //获取已授权的二级资源列表
+                })
+                let isauthlist = authList.concat(childrens)
+                this.roleAuthList = isauthlist
+            })
         }
     }
 }
